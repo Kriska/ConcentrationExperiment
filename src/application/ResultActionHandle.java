@@ -11,8 +11,6 @@ import javafx.scene.text.Text;
 
 public class ResultActionHandle {
 	private String answer;
-	private double points;
-	private double time;
 	
 	
 
@@ -28,17 +26,16 @@ public class ResultActionHandle {
 
 	ResultActionHandle(Button result,MediaPlayer mediaPlayer, KeyHandle kh, BorderPane border, boolean last) {
 		answer = new String();
-		if (!last) {
-			result.setDisable(true);
-		}
+		//result.setDisable(!last);
 		result.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
 				mediaPlayer.pause();
 				double time = (kh.getEndTime()  - kh.getStartTime());
-			   String toAnswer = new String ((new LastLineOfFile(new File("results.txt"),1).getStr()));
-				
-				setAnswer(toAnswer.substring(0, 40) + '\n' + "Точки: " + kh.getPoints() + "\t \t Време/в милисекунди/: " + time);
+			 //  String fileReadAnswer = new String ((new LastLineOfFile(new File("results.txt"),1).getStr()));
+			//	String result = fileReadAnswer.split("\t\t")[0];
+				String result = "";
+				setAnswer(result+ '\n' + "Точки: " + kh.getPoints() + "\t \t Време/в милисекунди/: " + time);
 				border.setCenter(new Text( answer));
 				
 			}

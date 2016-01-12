@@ -3,22 +3,19 @@ package application;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
-
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,32 +36,42 @@ public class Display {
 		try {
 			BorderPane border = new BorderPane();
 			Scene scene = new Scene(border,640,300);
-			File file = new File("D:\\krissy\\a.mp3");
+			File file = new File("a.mp3");
 				Media media = new Media(file.toURI().toURL().toString());
 				MediaPlayer mediaPlayer = new MediaPlayer(media);
 				MediaView mediaViewer = new MediaView(mediaPlayer);
-				mediaPlayer.setAutoPlay(withMusic);
+				if (withMusic) {
+					mediaPlayer.setOnEndOfMedia(new Runnable() {
+					       public void run() {
+					         mediaPlayer.seek(Duration.ZERO);
+					       }
+					   });
+					  mediaPlayer.play();
+					mediaPlayer.setAutoPlay(withMusic);
+				}
 				border.setLeft(mediaViewer);
-			String text= new String("\t Колко еднкви цифри виждате написани? \n Натиснете:\t'D' за две, \n\t\t\t'K' за три, \n\t\t\t'O' за четири." );
+			String text= new String("\t Колко еднкви цифри виждате написани? \n Натиснете:\t'2' за две, \n\t\t\t'3' за три, \n\t\t\t'4' за четири." );
 			Label instructions= new Label(text);
 			instructions.setFont(new Font("Ariel", 20));
 			border.setPadding(new Insets(10));
-			Text t = new Text("\n Натиснете 'ЕNTER' два последователни пъти, за да започнете!");
+			String pressEnterInstruction = new String("\n Натиснете 'ЕNTER' два последователни пъти, за да започнете!");
+			Text t = new Text(pressEnterInstruction);
 			border.setStyle("-fx-background-color: #FFFFFF;");
 			border.setCenter(t);
-			RowExample example = new RowExample();
+			RowExample example = new RowExample(false);
 			BorderPane.setAlignment(instructions, Pos.CENTER);
 			border.setTop(instructions);
 	       
 	        Button result=  new Button("Виж резултата си");
 	        Button partTwo = new Button("Част две");
+	        //да изписва края 
 	        if (last) {
-	        	
 	        	partTwo.setText("КРАЙ");
 	        	 partTwo.setOnAction(new EventHandler<ActionEvent>() {
 	 				@Override
 	 				public void handle(ActionEvent arg0) {
-	 					Final last = new Final(parsedStage);
+	 					mediaPlayer.pause();
+	 					new Final(parsedStage);
 	 					
 	 				}
 	 				
@@ -74,8 +81,7 @@ public class Display {
 	        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 	        	public void handle(KeyEvent ke) {
 		            		if(ke.getCode() == KeyCode.ENTER) {
-		            			
-		           			 kh.set(scene, border,example,result,partTwo);
+		           			 kh.set(scene, border,example,result,partTwo,last);
 		           			kh.setStartTime(System.currentTimeMillis());
 		            		}
 		            }	
@@ -88,10 +94,10 @@ public class Display {
 
 					@Override
 					public void handle(ActionEvent arg0) {
-						String one = new String(rah.getAnswer());
+						new String(rah.getAnswer());
 						mediaPlayer.pause();
 						writeToFile(kh, rah);
-						Display partTwo = new Display(parsedStage,true,true);
+						new Display(parsedStage,true,true);
 					}
 					
 				});
@@ -111,20 +117,25 @@ public class Display {
 		}
 	}
 	public void writeToFile(KeyHandle kh, ResultActionHandle rah) {
+		BufferedWriter writer = null;
 		try {
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("results.txt", true),
-					 "Unicode"));
-            BufferedWriter bw = new BufferedWriter( writer );
-            
+			 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("results.txt", true),
+					Charset.forName("UTF-16")));            
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             double time = (kh.getEndTime()  - kh.getStartTime());
 			   rah.setAnswer("Точки: " + kh.getPoints() + "\t \t Време/в милисекунди/: " + time);		   
             writer.append(System.getProperty("line.separator"));
             writer.append(rah.getAnswer() + "\t\t" + dateFormat.format(date));
-            bw.close();
 		} catch(IOException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

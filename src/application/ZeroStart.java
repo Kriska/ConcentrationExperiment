@@ -19,14 +19,14 @@ public class ZeroStart {
 			BorderPane border = new BorderPane();
 			Scene scene = new Scene(border,640,300);
 			
-			String text= new String("\t Колко еднкви цифри виждате написани? \n Натиснете:\t'D' за две, \n\t\t\t'K' за три, \n\t\t\t'O' за четири." );
+			String text= new String("\t Колко еднкви цифри виждате написани? \n Натиснете:\t'2' за две, \n\t\t\t'3' за три, \n\t\t\t'4' за четири." );
 			Label instructions= new Label(text);
 			instructions.setFont(new Font("Ariel", 20));
 			border.setPadding(new Insets(10));
-			Text t = new Text("\n Натиснете 'ЕNTER' два последователни пъти, за да започнете!");
+			Text t = new Text("\n Натиснете 'ЕNTER'. Ще започне пробен вариант с цел запознаване със задачата.");
 			border.setStyle("-fx-background-color: #FFFFFF;");
 			border.setCenter(t);
-			RowExample example = new RowExample();
+			RowExample example = new RowExample(true);
 			BorderPane.setAlignment(instructions, Pos.CENTER);
 			border.setTop(instructions);
 	       

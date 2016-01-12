@@ -1,6 +1,5 @@
 package application;
 
-import java.io.File;
 
 import javafx.application.Application;
 

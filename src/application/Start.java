@@ -1,13 +1,5 @@
 package application;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -33,7 +25,9 @@ public class Start extends Application {
 			Label instructions= new Label(text);
 			instructions.setFont(new Font("Ariel", 20));
 			border.setPadding(new Insets(10));
-			Text instruction = new Text("\n Условия!");
+			Text instruction = new Text("\n Пред вас ще бъде представен тест в две части."
+					+ "\n Давайте своите отговори с максимална бързина и точност.\n  Успех!");
+			instruction.setFont(new Font("Ariel Black", 18));
 			border.setStyle("-fx-background-color: #FFFFFF;");
 			border.setCenter(instruction);
 			BorderPane.setAlignment(instructions, Pos.CENTER);
@@ -41,13 +35,14 @@ public class Start extends Application {
 	       
 	        Button start=  new Button("Започни");
 	       border.setBottom(start);
-	       border.setAlignment(start, Pos.CENTER);
+	       BorderPane.setAlignment(start, Pos.CENTER);
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
 			
 			start.setOnAction(new EventHandler<ActionEvent>() {
 
+				@SuppressWarnings("unused")
 				@Override
 				public void handle(ActionEvent arg0) {
 					ZeroStart zeroExample = new ZeroStart(primaryStage);

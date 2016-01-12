@@ -1,16 +1,13 @@
 package application;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class KeyHandle {
 		private long endTime;
@@ -33,7 +30,7 @@ public class KeyHandle {
 		KeyHandle() {
 			
 		}
-		public void set(Scene scene, BorderPane border, RowExample example, Button results, Button partTwo) {
+		public void set(Scene scene, BorderPane border, RowExample example, Button results, Button partTwo,boolean last) {
 			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				 int  i =0;
 				 int point = -1;
@@ -44,7 +41,18 @@ public class KeyHandle {
 		            			}
 		            			i++;
 		            			if (i == example.size()) {
-		            				border.getTop().setVisible(false);
+		            				
+		            				//tuk da se dobavq noviq prozorec? 
+		            				if (last) {
+		            					border.getTop().setVisible(false);
+		            				}
+		            				else {
+		            					Text t = new Text(new String("\nМоля, сложете слушалките."
+		            							+ "\n При стартиране на част II, ще чуете рекламен блок в ефира на \nбългарска радио станция."
+		            							+ " \n Докато слушате, продължете числовия тест."));
+		            					t.setFont(new Font("Ariel Black", 18));
+		            					border.setTop(t);
+		            				}
 		            				border.setCenter(results);
 		            				border.setBottom(partTwo);
 		            				border.setAlignment(partTwo, Pos.CENTER);
